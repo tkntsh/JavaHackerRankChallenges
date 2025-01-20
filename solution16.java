@@ -1,22 +1,36 @@
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Scanner;
 
-class Solution
+public class DuplicateWords 
 {
-    public static void main(String[] args)
+    public static void main(String[] args) 
     {
+        //setting pattern
+        String regex = "\\b(\\w+)(\\s+\\1\\b)+";
+        Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+
+        //reading in input
         Scanner in = new Scanner(System.in);
-        while(in.hasNext())
+        int numSentences = Integer.parseInt(in.nextLine());
+        
+        //running loop until, no sentences left
+        while(numSentences-- > 0) 
         {
-            String IP = in.next();
-            System.out.println(IP.matches(new MyRegex().pattern));
+            String input = in.nextLine();
+            
+            Matcher m = p.matcher(input);
+            
+            //check for sequences
+            while (m.find()) 
+            {
+                input = input.replaceAll("(?i)\\b" + m.group(1) + "(?:\\s+\\b" + m.group(1) + "\\b)+", m.group(1));
+            }
+            
+            //print
+            System.out.println(input);
         }
-
+        //close
+        in.close();
     }
-}
-
-class MyRegex 
-{
-    String pattern = "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 }
